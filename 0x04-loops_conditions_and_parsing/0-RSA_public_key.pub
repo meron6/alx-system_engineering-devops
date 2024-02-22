@@ -1,16 +1,16 @@
-Your identification has been saved in /home/user/.ssh/id_rsa.
-Your public key has been saved in /home/user/.ssh/id_rsa.pub.
+Your identification has been saved in id_rsa.pub
+Your public key has been saved in id_rsa.pub.pub
 The key fingerprint is:
-SHA25:ssh aa420209cd89@aa420209cd89.5a4167ae.alx-cod.online
-he key's randomart image is:
-+--- [RSA 3072]----+
-| . ..oo..|
-| . . . . .o.X.|
-| . . o. ..+ B|
-| . o.o .+ ..|
-| ..o.S o.. |
-| . %o= . |
-| @.B... . |
-| o.=. o. . . .|
-| .oo E. . .. |
-+---- [SHA256]-----+
+SHA256:pCWpJ2H0IxcZwNynGIIvRR7UPz4F40lv0V5aqGNtY+Q root@aa420209cd89
+The key's randomart image is:
++---[RSA 3072]----+
+| +++oooo . .     |
+|..oo=.*oo + o    |
+| o..+**BoB +     |
+|. ...=**B E      |
+| .  o.o=S+ .     |
+|     oo          |
+|       .         |
+|                 |
+|                 |
++----[SHA256]-----+
