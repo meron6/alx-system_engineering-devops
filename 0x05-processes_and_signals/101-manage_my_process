@@ -1,62 +1,41 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Manages the script manage_my_process.
+#   When passed the argument `start`:
+#     1. Starts manage_my_process
+#     2. Creates a file containings its PID in /var/run/my_process.pid
+#     3. Displays "manage_my_process started"
+#   When passed the argument `stop`:
+#     1. Stops manage_my_process
+#     2. Deletes the file /var/run/my_process.pid
+#     3. Displays "manage_my_process stopped"
+#   When passed the argument `restart`:
+#     1. Stops manage_my_process
+#     2. Deletes the file /var/run/my_process.pid
+#     3. Starts manage_my_process
+#     4. Creates a file containing its PID in /var/run/my_process.pid
+#     5. Displays "manage_my_process restarted"
+#   If any other or no arguments are passed, displays
+#+  "Usage: manage_my_process {start|stop|restart}"
 
-### BEGIN INIT INFO
-# Provides:          manage_my_process
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Start/stop/manage my_process
-### END INIT INFO
-
-PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DESC="Manage my process"
-NAME=manage_my_process
-SCRIPT=/path/to/manage_my_process.sh
-PIDFILE=/var/run/my_process.pid
-USER=root
-
-# Check if the script is executable
-test -x $SCRIPT || exit 0
-
-# Function to start the process
-start() {
-    echo -n "Starting $DESC: "
-    start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --user $USER --chuid $USER --exec $SCRIPT
-    echo "$NAME."
-}
-
-# Function to stop the process
-stop() {
-    echo -n "Stopping $DESC: "
-    start-stop-daemon --stop --pidfile $PIDFILE --retry 10
-    echo "$NAME."
-}
-
-# Function to restart the process
-restart() {
-    echo -n "Restarting $DESC: "
-    stop
-    sleep 1
-    start
-    echo "$NAME."
-}
-
-# Check argument
-case "$1" in
-    start)
-        start
-        ;;
-    stop)
-        stop
-        ;;
-    restart|force-reload)
-        restart
-        ;;
-    *)
-        echo "Usage: $SCRIPT {start|stop|restart}" >&2
-        exit 3
-        ;;
-esac
-
-exit 0
+if [ "${1}" == "start" ]
+then
+    ./manage_my_process &
+    touch /var/run/my_process.pid
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process started"
+elif [ "${1}" == "stop" ]
+then
+    echo "manage_my_process stopped"
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+elif [ "${1}" == "restart" ]
+then
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+    ./manage_my_process &
+    touch /var/run/my_process.pid
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process restarted"
+else
+    echo "Usage: manage_my_process {start|stop|restart}"
+fi
