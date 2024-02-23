@@ -1,0 +1,6 @@
+#!/bin/bash
+# This script displays lines containing the bash word and shows your Bash PID
+# shellcheck disable=SC2009
+
+ps -ef --forest | grep -w bash # List all processes and filter by bash
+echo "My Bash PID is ${1%% *}" # Print the first number in the first line

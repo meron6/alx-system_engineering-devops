@@ -1,0 +1,4 @@
+#!/bin/bash
+# This script displays a list of currently running processes
+
+ps -ef --forest
