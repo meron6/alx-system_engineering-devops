@@ -1,0 +1,19 @@
+# Define the OSI model
+osi_model = {
+    1: "Physical",
+    2: "Data Link",
+    3: "Network",
+    4: "Transport",
+    5: "Session",
+    6: "Presentation",
+    7: "Application"
+}
+
+# Function to print the OSI model
+def print_osi_model():
+    print("OSI Model:")
+    for layer, name in osi_model.items():
+        print(f"Layer {layer}: {name}")
+
+# Call the function to print the OSI model
+print_osi_model()
