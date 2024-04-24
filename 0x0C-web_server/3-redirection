@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Install nginx if not already installed
+apt-get update
+apt-get install -y nginx
+
+# Configure nginx to listen on port 80
+sed -i 's/80 default_server/80/' /etc/nginx/sites-available/default
+
+# Create a simple HTML page with "Hello World!"
+echo "<html><body>Hello World!</body></html>" > /var/www/html/index.html
+
+# Create a new location block for redirection
+echo "
+location /redirect_me {
+    return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+}" >> /etc/nginx/sites-available/default
+
+# Restart nginx
+service nginx restart
+
+# Print a success message
+echo "Nginx web server is installed, configured, and set up for redirection."
