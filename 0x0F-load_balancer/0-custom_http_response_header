@@ -1,17 +1,56 @@
 #!/usr/bin/env bash
-nstall Nginx
-sudo apt-get update
-sudo apt-get install -y nginx
+# Installs HAProxy version 1.8 with the following configurations:
+#+    Enables management via the init script.
+#+    Distributes requests using a round-robin algorithm.
 
-# Define the custom header
-custom_header="add_header X-Served-By \$hostname;"
+set -euo pipefail  # Enable strict mode
 
-# Add the custom header to the Nginx configuration
-sudo sed -i "/server_name _;/a \\t$custom_header" /etc/nginx/sites-available/default
+# Install HAProxy version 1.8 from PPA repository
+apt-get install -y software-properties-common
+add-apt-repository -y ppa:vbernat/haproxy-1.8
+apt-get update
+apt-get install -y haproxy=1.8.*
 
-# Restart Nginx to apply changes
-sudo systemctl restart nginx
+# Enable management via the init script
+echo "ENABLED=1" >> /etc/default/haproxy
 
-# Output message to confirm configuration
-echo "Nginx configured with custom HTTP response header successfully."
+# Backup the original HAProxy configuration file
+mv /etc/haproxy/haproxy.cfg{,.original}
 
+# Create a new HAProxy configuration file
+touch /etc/haproxy/haproxy.cfg
+
+# Populate the HAProxy configuration with desired settings
+printf %s "global
+    log 127.0.0.1 local0 notice
+    maxconn 2000
+    user haproxy
+    group haproxy
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    retries 3
+    option redispatch
+    timeout connect  5000
+    timeout client  10000
+    timeout server  10000
+
+listen hbnb
+    bind 0.0.0.0:80
+    mode http
+    stats enable
+    stats uri /haproxy?stats
+    balance roundrobin
+    option httpclose
+    option forwardfor
+    server 1733-web-01 3.235.21.36:80 check
+    server 1733-web-02 3.227.3.18:80 check
+" >> /etc/haproxy/haproxy.cfg
+
+# Start the HAProxy service
+service haproxy start
+
+echo "HAProxy installed and configured successfully."

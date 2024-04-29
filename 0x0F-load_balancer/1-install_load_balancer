@@ -1,27 +1,56 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Installs HAProxy version 1.8 with the following configurations:
+#+    Enables management via the init script.
+#+    Distributes requests using a round-robin algorithm.
 
-# Install HAProxy
-sudo apt-get update
-sudo apt-get install -y haproxy
+set -euo pipefail  # Enable strict mode
 
-# Configure HAProxy
-sudo sed -i '/^frontend main$/,/^$/d' /etc/haproxy/haproxy.cfg
-sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null <<EOT
+# Install HAProxy version 1.8 from PPA repository
+apt-get install -y software-properties-common
+add-apt-repository -y ppa:vbernat/haproxy-1.8
+apt-get update
+apt-get install -y haproxy=1.8.*
 
-frontend main
-    bind *:80
-    default_backend webservers
+# Enable management via the init script
+echo "ENABLED=1" >> /etc/default/haproxy
 
-backend webservers
+# Backup the original HAProxy configuration file
+mv /etc/haproxy/haproxy.cfg{,.original}
+
+# Create a new HAProxy configuration file
+touch /etc/haproxy/haproxy.cfg
+
+# Populate the HAProxy configuration with desired settings
+printf %s "global
+    log 127.0.0.1 local0 notice
+    maxconn 2000
+    user haproxy
+    group haproxy
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    retries 3
+    option redispatch
+    timeout connect  5000
+    timeout client  10000
+    timeout server  10000
+
+listen hbnb
+    bind 0.0.0.0:80
+    mode http
+    stats enable
+    stats uri /haproxy?stats
     balance roundrobin
-    server web-01 [STUDENT_ID]-web-01:80 check
-    server web-02 [STUDENT_ID]-web-02:80 check
-EOT
+    option httpclose
+    option forwardfor
+    server 1733-web-01 3.235.21.36:80 check
+    server 1733-web-02 3.227.3.18:80 check
+" >> /etc/haproxy/haproxy.cfg
 
-# Enable HAProxy init script
-sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
-
-# Restart HAProxy service
-sudo service haproxy restart
+# Start the HAProxy service
+service haproxy start
 
 echo "HAProxy installed and configured successfully."
