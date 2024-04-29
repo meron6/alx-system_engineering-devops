@@ -1,56 +1,22 @@
-#!/usr/bin/env bash
-# Installs HAProxy version 1.8 with the following configurations:
-#+    Enables management via the init script.
-#+    Distributes requests using a round-robin algorithm.
+ an Ubuntu machine with nginx
+FILE="/etc/nginx/sites-available/default"
+ERRORFILE="/usr/share/nginx/html/404error.html"
 
-set -euo pipefail  # Enable strict mode
+REDIRECT="\n\tlocation /redirect_me {\n\t\treturn 301 https://youtu.be/dQw4w9WgXcQ;\n\t}\n"
+ERRORREDIRECT="\n\terror_page 404 /404error.html;\n\tlocation = /404error.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}\n"
+CUSTOMHEADER='\n\tadd_header X-Served-By $hostname;\n'
 
-# Install HAProxy version 1.8 from PPA repository
-apt-get install -y software-properties-common
-add-apt-repository -y ppa:vbernat/haproxy-1.8
-apt-get update
-apt-get install -y haproxy=1.8.*
+STRING="Hello World!"
+FOUR="Ceci n'est pas une page"
 
-# Enable management via the init script
-echo "ENABLED=1" >> /etc/default/haproxy
+apt-get -y update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
+echo "$STRING" > /var/www/html/index.nginx-debian.html
+sed -i "37i\ $REDIRECT" "$FILE"
 
-# Backup the original HAProxy configuration file
-mv /etc/haproxy/haproxy.cfg{,.original}
+echo "$FOUR" > "$ERRORFILE"
+sed -i "37i\ $ERRORREDIRECT" "$FILE"
 
-# Create a new HAProxy configuration file
-touch /etc/haproxy/haproxy.cfg
-
-# Populate the HAProxy configuration with desired settings
-printf %s "global
-    log 127.0.0.1 local0 notice
-    maxconn 2000
-    user haproxy
-    group haproxy
-
-defaults
-    log     global
-    mode    http
-    option  httplog
-    option  dontlognull
-    retries 3
-    option redispatch
-    timeout connect  5000
-    timeout client  10000
-    timeout server  10000
-
-listen hbnb
-    bind 0.0.0.0:80
-    mode http
-    stats enable
-    stats uri /haproxy?stats
-    balance roundrobin
-    option httpclose
-    option forwardfor
-    server 1733-web-01 3.235.21.36:80 check
-    server 1733-web-02 3.227.3.18:80 check
-" >> /etc/haproxy/haproxy.cfg
-
-# Start the HAProxy service
-service haproxy start
-
-echo "HAProxy installed and configured successfully."
+sed -i "37i\ $CUSTOMHEADER" "$FILE"
+service nginx restart
