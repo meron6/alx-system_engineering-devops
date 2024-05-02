@@ -1,10 +1,24 @@
 #!/bin/bash
-# Ensure Nginx is installed
-sudo apt-get update
-sudo apt-get install nginx
 
-# Configure Nginx to listen on port 80
-sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+# Update package index
+apt-get update
 
-# Restart Nginx
-sudo systemctl restart nginx
+# Install net-tools to use netstat command
+apt-get install -y net-tools
+
+# Check if Nginx is running
+nginx_status=$(service nginx status)
+
+# If Nginx is not running, start it
+if [[ $nginx_status == *"not"* ]]; then
+    service nginx start
+fi
+
+# Check if Nginx is listening on port 80
+nginx_listen=$(netstat -tuln | grep ':80')
+
+# If Nginx is not listening on port 80, update Nginx configuration to listen on port 80 and restart Nginx
+if [[ -z $nginx_listen ]]; then
+    sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+    service nginx restart
+fi
