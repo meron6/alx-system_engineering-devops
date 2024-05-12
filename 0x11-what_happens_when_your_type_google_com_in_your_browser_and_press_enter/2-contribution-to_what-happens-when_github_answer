@@ -1,0 +1,23 @@
+://docs.google.com/document/d/1_j-JDPPkHZOe7xdbHmJawjyBi0oR-GZRSqBGpgi3usI/edit?usp=sharing
+
+Adding Explanation of Load Balancing Process
+
+Description:
+
+Hello maintainers,
+
+I've noticed that the current explanation in the "What Happens When" repository lacks details about the load balancing process, an essential component in serving web traffic efficiently. To enhance the comprehensiveness of the answer, I've added a detailed explanation of how load balancing works.
+
+Changes Made
+
+I added a section explaining the role of load balancers in distributing incoming requests across multiple servers.
+Described various load balancing algorithms such as Round Robin, Least Connections, and IP Hashing, along with their respective advantages and use cases.
+Included are examples to illustrate how load balancing helps improve scalability, availability, and performance of web applications.
+Clarified the importance of load balancing in modern web architectures, especially for high-traffic websites like Google.
+
+I believe these additions will provide readers with a more comprehensive understanding of the web stack and contribute to the overall quality of the repository.
+
+Thank you for considering my contribution!
+
+Best regards,
+Meron

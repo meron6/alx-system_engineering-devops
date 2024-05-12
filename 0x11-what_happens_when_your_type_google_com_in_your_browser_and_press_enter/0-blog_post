@@ -1,0 +1,49 @@
+Understanding the Journey: What Happens When You Type https://www.google.com and Press Enter?
+
+
+
+Introduction:
+Have you ever wondered what happens behind the scenes when you type a URL into your browser and hit enter? The seemingly simple act of visiting a website involves a complex series of steps that rely on various components working together seamlessly. In this article, we'll dive into the intricate journey that takes place when you type "https://www.google.com" into your browser's address bar.
+
+DNS Request:
+The journey begins with a Domain Name System (DNS) request. When you enter a URL like "www.google.com," your browser needs to translate this human-readable address into an IP address that computers can understand. It sends a DNS query to a DNS server, which then resolves the domain name to the corresponding IP address.
+
+TCP/IP:
+Once the IP address is obtained, the browser initiates a connection using the Transmission Control Protocol (TCP) and the Internet Protocol (IP). TCP establishes a reliable connection between your computer and the server hosting the website, while IP handles the routing of data packets across the internet.
+
+Firewall:
+Before the connection is established, it may need to pass through a firewall. Firewalls are network security devices that monitor and control incoming and outgoing traffic based on predetermined security rules. They help protect against unauthorized access and ensure that only legitimate connections are allowed.
+
+
+
+HTTPS/SSL:
+In the case of "https://" URLs like "https://www.google.com," the connection is secured using the Hypertext Transfer Protocol Secure (HTTPS) protocol. This involves a process called SSL/TLS (Secure Sockets Layer/Transport Layer Security) encryption, which encrypts the data exchanged between your browser and the web server, ensuring confidentiality and integrity.
+
+Load-Balancer
+Many popular websites, like Google, handle a large volume of traffic by distributing it across multiple servers. This is where load balancers come into play. A load balancer sits between the client (your browser) and the server farm, distributing incoming requests to ensure optimal resource utilization and prevent any single server from becoming overwhelmed.
+
+Web Server:
+Once the connection is established and the request is received, it's passed on to the web server hosting the website. The web server processes the request, retrieves the requested resources (such as HTML, CSS, JavaScript files, and images), and generates a response.
+
+Application Server
+For dynamic websites that rely on server-side processing, the web server may need to communicate with an application server. The application server executes the necessary code (e.g., PHP, Python, Ruby) to generate dynamic content based on user inputs or database queries.
+
+Database:
+In many cases, websites need to retrieve or store data in a database. This could involve fetching product information, user profiles, or any other relevant data. The application server communicates with the database server to retrieve or update the required information.
+
+
+
+Conclusion:
+The journey from typing a URL into your browser to accessing a website involves a sophisticated interplay of technologies and systems. Understanding this process not only gives us insight into how the internet works but also underscores the importance of various components like DNS, TCP/IP, security protocols, load balancers, web servers, application servers, and databases working together seamlessly to deliver the web content we rely on every day.
+
+
+
+
+References:
+ DNS Explained: https://www.cloudflare.com/learning/dns/what-is-dns/
+ TCP/IP Overview: https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/
+ Introduction to Firewalls: https://www.cisco.com/c/en/us/products/security/firewalls/what-is-a-firewall.html
+HTTPS and SSL/TLS: https://www.cloudflare.com/learning/ssl/what-happens-in-a-tls-handshake/
+Load Balancing: https://www.nginx.com/resources/glossary/load-balancing/
+Web Servers vs. Application Servers: https://www.ibm.com/cloud/learn/web-servers-vs-application-servers
+Introduction to Databases: https://www.oracle.com/database/what-is-database/
